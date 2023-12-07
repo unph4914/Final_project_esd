@@ -1,11 +1,6 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 
-#define GPIOCEN             (1U<<2) // GPIOC Enable
-#define PIN1                (1U<<1) // PC1
-#define LED_ON              (1U<<1) // Set PC1
-#define LED_OFF             ~(1U<<1) // Reset PC1
-
 void UART2_Init(void) {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN; // Enable clocks for GPIOA and USART2
 	RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
@@ -58,11 +53,13 @@ void GPIO_Init(void) {
 	GPIOB->PUPDR &=
 			~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1 | GPIO_PUPDR_PUPDR2); // No pull-up, pull-down
 
-	RCC->AHB1ENR |= GPIOCEN;
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN; // Enable clock for GPIOD (for PD12)
 
-	/* Set PC1 as output pin */
-	GPIOC->MODER |= (1U << 2);  // Set mode to output for PC1
-	GPIOC->MODER &= ~(1U << 3); // Ensure it's not in alternate function mode
+	// Configure PD12 as output
+	GPIOD->MODER |= GPIO_MODER_MODER12_0;
+	GPIOD->OTYPER &= ~GPIO_OTYPER_OT12; // Push-pull
+	GPIOD->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR12; // High speed
+	GPIOD->PUPDR &= ~GPIO_PUPDR_PUPDR12; // No pull-up, pull-down
 }
 
 void LED_Control(uint16_t sensorValue) {
@@ -79,13 +76,12 @@ void LED_Control(uint16_t sensorValue) {
 		// Turn on LED connected to PB2
 		GPIOB->BSRR = GPIO_BSRR_BS2;
 	}
-}
 
-void Relay_Control(uint16_t sensorValue) {
+	GPIOD->BSRR = GPIO_BSRR_BR12;
+
 	if (sensorValue > 1000) {
-		GPIOC->ODR |= LED_ON;  // Turn on the relay
-	} else {
-		GPIOC->ODR &= LED_OFF; // Turn off the relay
+		// Turn on the LED connected to PD12
+		GPIOD->BSRR = GPIO_BSRR_BS12;
 	}
 }
 
@@ -105,7 +101,6 @@ int main(void) {
 		UART2_SendString(buffer);
 
 		LED_Control(sensorValue);
-		Relay_Control(sensorValue);
 
 		// Delay
 		for (uint32_t i = 0; i < 500000; i++)
