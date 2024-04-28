@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Core/Src/UART_Data.c:19:6:UART2_Init	1
+../Core/Src/UART_Data.c:33:6:UART2_SendString	3
+../Core/Src/UART_Data.c:42:6:USART2_IRQHandler	3
+../Core/Src/UART_Data.c:52:6:UART2_SendData	4
+../Core/Src/UART_Data.c:68:6:UART2_ReceiveData	3
+../Core/Src/UART_Data.c:79:6:processElement	2

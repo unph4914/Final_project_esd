@@ -1,0 +1,2 @@
+../Core/Src/Clock_config.c:12:6:Clock_Init	4
+../Core/Src/Clock_config.c:30:6:delay_ms	2

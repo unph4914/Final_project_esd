@@ -1,0 +1,7 @@
+../Drivers/CMSIS/Include/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
+../Core/Src/UART_Data.c:19:6:UART2_Init	8	static
+../Core/Src/UART_Data.c:33:6:UART2_SendString	16	static
+../Core/Src/UART_Data.c:42:6:USART2_IRQHandler	4	static
+../Core/Src/UART_Data.c:52:6:UART2_SendData	24	static
+../Core/Src/UART_Data.c:68:6:UART2_ReceiveData	24	static
+../Core/Src/UART_Data.c:79:6:processElement	56	static
